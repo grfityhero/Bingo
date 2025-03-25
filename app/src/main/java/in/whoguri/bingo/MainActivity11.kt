@@ -2,6 +2,7 @@ package `in`.whoguri.bingo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.GridView
@@ -49,8 +50,8 @@ class MainActivity11 : AppCompatActivity() {
         adapter.setType(no)
         val title = findViewById<TextView>(R.id.title_)
         when (no) {
-            11 -> title.text = "Bingo! 11 P"
-//            10 -> title.text = "Bingo! G"
+//            11 -> title.text = "Bingo! 11 P"
+            15 -> title.text = "Bingo! A"
 //            1 -> title.text = "Bingo! 1"
 //            13 -> title.text = "Bingo! GT"
             133 -> title.text = "Bingo! GT"
@@ -104,7 +105,7 @@ class MainActivity11 : AppCompatActivity() {
             planT()
         }
         findViewById<TextView>(R.id.cal_1).setOnClickListener {
-            changeTab(11)
+            changeTab(15)
         }
         findViewById<TextView>(R.id.cal_2).setOnClickListener {
             changeTab(10) // hiden
@@ -298,8 +299,9 @@ class MainActivity11 : AppCompatActivity() {
 
             adapter.notify_()
         } else {
-            if (adapter.calType == 11)
-                AppData.dataList = NewLogic.calResult11P(AppData.dataList)
+            Log.e(">>",adapter.calType.toString())
+            if (adapter.calType == 15)
+                AppData.dataList = NewLogic.calResult15(AppData.dataList)
             else if (adapter.calType == 1)
                 AppData.dataList = Logic.calResult5(AppData.dataList)
             else if (adapter.calType == 12)

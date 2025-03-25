@@ -3,6 +3,7 @@ package `in`.whoguri.bingo.helpers
 import android.util.Log
 import `in`.whoguri.bingo.Data
 import `in`.whoguri.bingo.helpers.Logic.CORNERS
+import `in`.whoguri.bingo.helpers.Logic.getAll
 import `in`.whoguri.bingo.helpers.Logic.getHV
 import `in`.whoguri.bingo.helpers.Logic.getSel
 
@@ -100,6 +101,19 @@ object NewLogic {
             mList[i - 1] = data
         }
 
+        return mList
+    }
+
+    fun calResult15(list: ArrayList<Data>): ArrayList<Data> {
+        if (list.size != 25)
+            return Logic.getData()
+        val mList = list
+        for (i in 1..25) {
+            mList[i - 1] = calculateHidden15(list, list[i - 1], i)
+        }
+        for (i in 1..25) {
+            mList[i - 1] = calculate15(list, list[i - 1], i)
+        }
         return mList
     }
 
@@ -690,7 +704,7 @@ object NewLogic {
                 data.hidden = number
             }
         }
-        data.hidden
+        Log.i("?? "+ data.number, data.hidden.toString())
         return data
     }
 
@@ -1063,28 +1077,31 @@ object NewLogic {
         return result2
     }
 
-    fun calculateHidden9_dep(list: ArrayList<Data>, data: Data, clicked: Int): Data {
-        val h: Double = (1.0 / getSel(data.h, list)
-            .filter { item -> !item.isClicked }.size).roundOffDecimal3()
-        val v: Double = (1.0 / getSel(data.v, list)
-            .filter { item -> !item.isClicked }.size).roundOffDecimal3()
-        val d: Double = (1.0 / getSel(data.d, list)
-            .filter { item -> !item.isClicked }.size).roundOffDecimal3()
-        var c = 0.0
-        if (CORNERS.contains(clicked)) {
-            c = (1.0 / getSel(CORNERS, list)
-                .filter { item -> !item.isClicked }.size).roundOffDecimal3()
+    fun calculateHidden15(list: ArrayList<Data>, data: Data, clicked: Int): Data {
+        data.hidden = (getAll(data, list).filter { !it.isClicked }.size.toDouble()/data.bingos).roundOffDecimal3()
+        return data
+    }
+    fun calculate15(list: ArrayList<Data>, data: Data, clicked: Int): Data {
+var c= 0.0
+        var r= 0.0
+        var count =0
+        getSel(data.v, list).filter { !it.isClicked }.forEach {
+            c+= it.hidden
+            count++
         }
+         c= c/count
+        count = 0
 
-        data.hidden = (h + v + d + c).roundOffDecimal3()
-
-        if (data.code == "o5") {
-            Log.e(">>>HIDDEN", data.hidden.toString() + " :: " + v)
+        getSel(data.h, list).filter { !it.isClicked }.forEach {
+            r+= it.hidden
+            count++
         }
-        data.subHiddenH = h
-        data.subHiddenV = v
-        data.subHiddenD = d
-        data.subHiddenC = c
+        r= r/count
+        data.finalValue2= ((c+r)/2).roundOffDecimal3()
+
+        if (data.code == "b2") {
+            Log.e(">>>HIDDEN", data.finalValue2.toString())
+        }
         return data
     }
 

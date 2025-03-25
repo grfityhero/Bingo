@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:padding="12dp"
-            android:text="11 P"
+            android:text="A"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="24dp" />
