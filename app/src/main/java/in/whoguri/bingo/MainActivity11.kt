@@ -45,6 +45,8 @@ class MainActivity11 : AppCompatActivity() {
     val tAdapter by lazy {
         ResultAdapter(this, arrayListOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), true)
     }
+    val result13Adapter by lazy { HLResultAdapter(this, arrayListOf(), 1) }
+
     val DEFAULT_CAL = 14
     fun changeTab(no: Int) {
         adapter.setType(no)
@@ -245,7 +247,6 @@ class MainActivity11 : AppCompatActivity() {
     var view = "a"
     var result13 = arrayListOf<Data_13>()
     var result13_2 = arrayListOf<Data_13_2>()
-    val result13Adapter by lazy { HLResultAdapter(this, arrayListOf(), 1) }
 
     private fun recal() {
         AppData.resultList.clear()

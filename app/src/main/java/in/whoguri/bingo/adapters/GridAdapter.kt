@@ -102,7 +102,7 @@ class GridAdapter(
                 if (data.finalValue2 != -1.0) {
                     courseTV.text = data.finalValue2.roundOffDecimal4().toString()
                 }
-            } else if (calType == 14 ||calType == 11 || calType == 9||calType == 2 ||  calType == 1  || calType==15) {
+            } else if (calType == 14 || calType == 11 || calType == 9 || calType == 2 || calType == 1 || calType == 15) {
                 if (data.finalValue2 != -1.0) {
                     courseTV.text = data.finalValue2.roundOffDecimal3().toString()
                 }
@@ -150,6 +150,28 @@ class GridAdapter(
                     courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.border))
                 else
                     courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.plain))
+            }
+        } else if (calType == 15) {
+            var minIndex = -1
+            var minValue = Double.MAX_VALUE
+
+            // Loop through the list to check conditions
+            for (index in list.indices) {
+                val data = list[index]
+                if (!data.isClicked && index != 12 && data.finalValue2 < minValue) {
+                    minValue = data.finalValue2
+                    minIndex = index
+                }
+            }
+
+            if (position == minIndex) {
+//                        courseTV.text = ""
+                courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.fill_red_))
+            } else {
+//                if (selcted.contains(position + 1))
+//                    courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.border))
+//                else
+                courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.plain))
             }
         } else if (calType == 13) {
             val selcted = NewLogic2.GROUP_ARRAY.find { it.first == higher }?.second ?: arrayListOf()
