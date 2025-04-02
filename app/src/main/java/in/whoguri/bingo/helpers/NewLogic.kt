@@ -4,7 +4,9 @@ import android.util.Log
 import `in`.whoguri.bingo.Data
 import `in`.whoguri.bingo.helpers.Logic.CORNERS
 import `in`.whoguri.bingo.helpers.Logic.getAll
+import `in`.whoguri.bingo.helpers.Logic.getCols
 import `in`.whoguri.bingo.helpers.Logic.getHV
+import `in`.whoguri.bingo.helpers.Logic.getRows
 import `in`.whoguri.bingo.helpers.Logic.getSel
 
 object NewLogic {
@@ -104,9 +106,9 @@ object NewLogic {
         return mList
     }
 
-    fun calResult15(list: ArrayList<Data>): ArrayList<Data> {
+    fun calResult15(list: ArrayList<Data>): Pair<ArrayList<Data>, ArrayList<Int>> {
         if (list.size != 25)
-            return Logic.getData()
+            return Pair(Logic.getData(), arrayListOf<Int>())
         val mList = list
         for (i in 1..25) {
             mList[i - 1] = calculateHidden15(list, list[i - 1], i)
@@ -114,7 +116,72 @@ object NewLogic {
         for (i in 1..25) {
             mList[i - 1] = calculate15(list, list[i - 1], i)
         }
-        return mList
+        var result = arrayListOf<Int>()
+
+        val hashMap = arrayListOf<Double>()
+        getRows().forEach {
+            var temp = 0.0
+            it.forEach {
+                val sel = mList.get(it - 1)
+                if (!sel.isClicked)
+                    temp += sel.finalValue2
+            }
+            hashMap.add(temp)
+        }
+        getCols().forEach {
+            var temp = 0.0
+            it.forEach {
+                val sel = mList.get(it - 1)
+                if (!sel.isClicked)
+                    temp += sel.finalValue2
+            }
+            hashMap.add(temp)
+        }
+
+        val DIAGONALS_1 = arrayListOf(1, 7, 19, 25)
+        var temp2 = 0.0
+        DIAGONALS_1.forEach {
+            val sel = mList.get(it - 1)
+            if (!sel.isClicked)
+                temp2 += sel.finalValue2
+        }
+        hashMap.add(temp2)
+
+        val DIAGONALS_2 = arrayListOf(5, 9, 17, 21)
+        var temp3 = 0.0
+        DIAGONALS_2.forEach {
+            val sel = mList.get(it - 1)
+            if (!sel.isClicked)
+                temp3 += sel.finalValue2
+        }
+
+        hashMap.add(temp3)
+        val CORNERS = arrayListOf(1, 5, 21, 25)
+        var temp = 0.0
+        CORNERS.forEach {
+            val sel = mList.get(it - 1)
+            if (!sel.isClicked)
+                temp += sel.finalValue2
+        }
+
+        hashMap.add(temp)
+        if (hashMap.isNotEmpty()) {
+            val maxValue = hashMap.maxOrNull()
+            val maxIndex = hashMap.indexOf(maxValue)
+            if (maxIndex == 12)
+                result = CORNERS
+            else if (maxIndex == 11)
+                result = DIAGONALS_2
+            else if (maxIndex == 10)
+                result = DIAGONALS_1
+            else if (maxIndex > 4)
+                result = getCols().get(maxIndex - 5)
+            else
+                result = getRows().get(maxIndex)
+        } else {
+            println("List is empty")
+        }
+        return Pair(mList, result)
     }
 
     fun calResult11P(list: ArrayList<Data>): ArrayList<Data> {
@@ -704,7 +771,7 @@ object NewLogic {
                 data.hidden = number
             }
         }
-        Log.i("?? "+ data.number, data.hidden.toString())
+        Log.i("?? " + data.number, data.hidden.toString())
         return data
     }
 
@@ -1078,26 +1145,27 @@ object NewLogic {
     }
 
     fun calculateHidden15(list: ArrayList<Data>, data: Data, clicked: Int): Data {
-        data.hidden = (getAll(data, list).filter { !it.isClicked }.size.toDouble()/data.bingos).roundOffDecimal3()
+        data.hidden = (getAll(data, list).filter { !it.isClicked }.size.toDouble() / data.bingos).roundOffDecimal3()
         return data
     }
+
     fun calculate15(list: ArrayList<Data>, data: Data, clicked: Int): Data {
-var c= 0.0
-        var r= 0.0
-        var count =0
+        var c = 0.0
+        var r = 0.0
+        var count = 0
         getSel(data.v, list).filter { !it.isClicked }.forEach {
-            c+= it.hidden
+            c += it.hidden
             count++
         }
-         c= c/count
+        c = c / count
         count = 0
 
         getSel(data.h, list).filter { !it.isClicked }.forEach {
-            r+= it.hidden
+            r += it.hidden
             count++
         }
-        r= r/count
-        data.finalValue2= ((c+r)/2).roundOffDecimal3()
+        r = r / count
+        data.finalValue2 = ((c + r) / 2).roundOffDecimal3()
 
         if (data.code == "b2") {
             Log.e(">>>HIDDEN", data.finalValue2.toString())

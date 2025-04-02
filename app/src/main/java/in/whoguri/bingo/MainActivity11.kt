@@ -300,10 +300,12 @@ class MainActivity11 : AppCompatActivity() {
 
             adapter.notify_()
         } else {
-            Log.e(">>",adapter.calType.toString())
-            if (adapter.calType == 15)
-                AppData.dataList = NewLogic.calResult15(AppData.dataList)
-            else if (adapter.calType == 1)
+            Log.e(">>", adapter.calType.toString())
+            if (adapter.calType == 15) {
+                val result = NewLogic.calResult15(AppData.dataList)
+                AppData.dataList = result.first
+                adapter.setGreensx(result.second)
+            } else if (adapter.calType == 1)
                 AppData.dataList = Logic.calResult5(AppData.dataList)
             else if (adapter.calType == 12)
                 AppData.dataList = NewLogic.calResult12(AppData.dataList)

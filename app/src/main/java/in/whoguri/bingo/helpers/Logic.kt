@@ -1084,7 +1084,6 @@ object Logic {
         val list = arrayListOf<ArrayList<Int>>()
 
         list.add(arrayListOf(1, 2, 3, 4, 5))
-
         list.add(arrayListOf(6, 7, 8, 9, 10))
         list.add(arrayListOf(11, 12, 14, 15))
         list.add(arrayListOf(16, 17, 18, 19, 20))
