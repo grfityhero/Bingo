@@ -1152,6 +1152,9 @@ object NewLogic {
     fun calculate15(list: ArrayList<Data>, data: Data, clicked: Int): Data {
         var c = 0.0
         var r = 0.0
+        var d = 0.0
+        var e = 0.0
+
         var count = 0
         getSel(data.v, list).filter { !it.isClicked }.forEach {
             c += it.hidden
@@ -1165,10 +1168,35 @@ object NewLogic {
             count++
         }
         r = r / count
-        data.finalValue2 = ((c + r) / 2).roundOffDecimal3()
+        count = 0
 
-        if (data.code == "b2") {
-            Log.e(">>>HIDDEN", data.finalValue2.toString())
+        if (CORNERS.contains(data.number)) {
+            getSel(data.d, list).filter { !it.isClicked }.forEach {
+                d += it.hidden
+                count++
+            }
+            d = d / count
+            count = 0
+            getSel(CORNERS, list).filter { !it.isClicked }.forEach {
+                e += it.hidden
+                count++
+            }
+            e = e / count
+            count = 0
+            data.finalValue2 = ((c + r + d+ e) / 4).roundOffDecimal3()
+        } else if (data.d.size > 0) {
+            getSel(data.d, list).filter { !it.isClicked }.forEach {
+                d += it.hidden
+                count++
+            }
+            d = d / count
+            count = 0
+            data.finalValue2 = ((c + r + d) / 3).roundOffDecimal3()
+        } else {
+            data.finalValue2 = ((c + r) / 2).roundOffDecimal3()
+        }
+        if (data.code == "b1") {
+            Log.e(">>>HIDDEN", data.finalValue2.toString() + " " + c + " " + r + "  " + d+" "+ e)
         }
         return data
     }

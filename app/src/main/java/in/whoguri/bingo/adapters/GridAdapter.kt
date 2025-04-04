@@ -154,7 +154,7 @@ class GridAdapter(
         } else if (calType == 15) {
                 if (position !== 12) {
                     if (greens.contains(data.number) && !data.isClicked) {
-                        courseTV.text = ""
+//                        courseTV.text = ""
                         courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.fill_red_))
                     } else
                         courseLL2.setBackgroundDrawable(context_.getDrawable(R.drawable.plain))

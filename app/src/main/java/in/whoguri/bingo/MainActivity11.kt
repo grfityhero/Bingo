@@ -47,7 +47,7 @@ class MainActivity11 : AppCompatActivity() {
     }
     val result13Adapter by lazy { HLResultAdapter(this, arrayListOf(), 1) }
 
-    val DEFAULT_CAL = 14
+    val DEFAULT_CAL = 15
     fun changeTab(no: Int) {
         adapter.setType(no)
         val title = findViewById<TextView>(R.id.title_)
